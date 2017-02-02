@@ -31,8 +31,7 @@ mkdir -p $CACHE_DIR/.tools/{wget,debootstrap}
 export PATH=/sbin:/usr/sbin:$PATH:$CACHE_DIR/.tools/wget/bin:$CACHE_DIR/.tools/debootstrap/usr/sbin:$BUILD_DIR/.tools/fakechroot/sbin:$BUILD_DIR/.tools/fakechroot/bin
 export DEBOOTSTRAP_DIR=$CACHE_DIR/.tools/debootstrap/usr/share/debootstrap
 export LD_LIBRARY_PATH=/lib/x86_64-linux-gnu
-export LFAKEPATH=$BUILD_DIR/.tools/fakechroot/lib/fakechroot/libfakechroot.so
-#$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/fakechroot/libfakechroot.so
+export LFAKEPATH=$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/fakechroot/libfakechroot.so
 
 #echo "-----> Fetching and installing wget"
 #cd $WGET_BUILD
@@ -53,15 +52,15 @@ export LFAKEPATH=$BUILD_DIR/.tools/fakechroot/lib/fakechroot/libfakechroot.so
 #DESTDIR=$CACHE_DIR/.tools/debootstrap fakeroot make install
 #echo "debootstrap installed" | indent
 
-echo "-----> Fetching, installing and vendoring fakechroot into /app/.tools/fakechroot/"
-cd $FAKECHROOT_BUILD
-git clone git://github.com/fabiokung/fakechroot.git
-cd fakechroot
-./autogen.sh
-./configure --prefix=$BUILD_DIR/.tools/fakechroot
-make
-make install
-echo "fakechroot vendored" | indent
+#echo "-----> Fetching, installing and vendoring fakechroot into /app/.tools/fakechroot/"
+#cd $FAKECHROOT_BUILD
+#git clone git://github.com/fabiokung/fakechroot.git
+#cd fakechroot
+#./autogen.sh
+#./configure --prefix=$BUILD_DIR/.tools/fakechroot
+#make
+#make install
+#echo "fakechroot vendored" | indent
 
 cd $BUILDPACK_DIR
 echo "-----> Bootstrapping a new base ubuntu trusty into /app/.root/"
