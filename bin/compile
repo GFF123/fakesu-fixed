@@ -65,8 +65,8 @@ export LFAKEPATH=$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/fakechroot/libfakechro
 cd $BUILDPACK_DIR
 echo "-----> Bootstrapping a new base ubuntu trusty into /app/.root/"
 mkdir -p $BUILD_DIR/.root
-fakechroot -l $LFAKEPATH -s fakeroot debootstrap --no-check-gpg --variant=fakechroot trusty $BUILD_DIR/.root || cat $BUILD_DIR/.root/debootstrap/debootstrap.log
-fakechroot -l $LFAKEPATH fakeroot chroot $BUILD_DIR/.root apt install -y --force-yes gpgv
+fakechroot -l $LFAKEPATH -s fakeroot-ng debootstrap --no-check-gpg --variant=fakechroot trusty $BUILD_DIR/.root || cat $BUILD_DIR/.root/debootstrap/debootstrap.log
+fakechroot -l $LFAKEPATH fakeroot-ng chroot $BUILD_DIR/.root apt install -y --force-yes gpgv
 echo "/app/.root bootstrapped" | indent
 
 sed -i -e "s/#force_color_prompt=yes/force_color_prompt=yes/" $BUILD_DIR/.root/root/.bashrc
@@ -74,12 +74,12 @@ echo "export PATH=/sbin:/usr/sbin:\$PATH" >> $BUILD_DIR/.root/root/.bashrc
 echo "cd $HOME" >> $BUILD_DIR/.root/root/.bashrc
 
 echo "-----> Updating packages"
-fakechroot -l $LFAKEFATH fakeroot chroot $BUILD_DIR/.root bash -c "cat > /etc/apt/sources.list <<EOF
+fakechroot -l $LFAKEFATH fakeroot-ng chroot $BUILD_DIR/.root bash -c "cat > /etc/apt/sources.list <<EOF
 deb http://archive.ubuntu.com/ubuntu trusty main universe
 deb http://archive.ubuntu.com/ubuntu trusty-security main
 deb http://archive.ubuntu.com/ubuntu trusty-updates main
 EOF"
-fakechroot -l $LFAKEPATH fakeroot chroot $BUILD_DIR/.root apt update
+fakechroot -l $LFAKEPATH fakeroot-ng chroot $BUILD_DIR/.root apt update
 echo "packages updated" | indent
 
 cd $BUILD_DIR/.root
