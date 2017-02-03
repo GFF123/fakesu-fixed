@@ -65,7 +65,7 @@ export LFAKEPATH=$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/fakechroot/libfakechro
 cd $BUILDPACK_DIR
 echo "-----> Bootstrapping a new base ubuntu trusty into /app/.root/"
 mkdir -p $BUILD_DIR/.root
-fakechroot -l $LFAKEPATH -s fakeroot-ng debootstrap --no-check-gpg --variant=fakechroot trusty $BUILD_DIR/.root || cat $BUILD_DIR/.root/debootstrap/debootstrap.log
+fakechroot -l $LFAKEPATH fakeroot-ng debootstrap --no-check-gpg --variant=fakechroot trusty $BUILD_DIR/.root || cat $BUILD_DIR/.root/debootstrap/debootstrap.log
 fakechroot -l $LFAKEPATH fakeroot-ng chroot $BUILD_DIR/.root apt install -y --force-yes gpgv
 echo "/app/.root bootstrapped" | indent
 
