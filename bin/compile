@@ -59,6 +59,7 @@ echo "polystrap downloaded" | indent
 #echo "fakechroot vendored" | indent
 
 cd $BUILDPACK_DIR
+ln -s $BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/libtalloc.so.2 libtalloc.so.2
 echo "-----> Bootstrapping a new base ubuntu trusty into /app/.root/"
 cat > $BUILD_DIR/.tools/multistrap.conf <<EOF
 [General]
