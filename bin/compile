@@ -43,14 +43,10 @@ export LFAKEPATH=$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/fakechroot/libfakechro
 #make install
 #echo "wget installed" | indent
 
-#echo "-----> Fetching and installing debootstrap"
-#cd $DEBOOTSTRAP_BUILD
-#wget http://archive.ubuntu.com/ubuntu/pool/main/d/debootstrap/debootstrap_1.0.55.tar.gz
-#tar zxvf debootstrap_1.0.55.tar.gz
-#cd debootstrap-1.0.55
-#DESTDIR=$CACHE_DIR/.tools/debootstrap fakeroot make
-#DESTDIR=$CACHE_DIR/.tools/debootstrap fakeroot make install
-#echo "debootstrap installed" | indent
+cd $BUILD_DIR
+echo "-----> Fetching polystrap"
+git clone https://github.com/josch/polystrap.git
+echo "polystrap downloaded" | indent
 
 #echo "-----> Fetching, installing and vendoring fakechroot into /app/.tools/fakechroot/"
 #cd $FAKECHROOT_BUILD
@@ -64,8 +60,27 @@ export LFAKEPATH=$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/fakechroot/libfakechro
 
 cd $BUILDPACK_DIR
 echo "-----> Bootstrapping a new base ubuntu trusty into /app/.root/"
+cat > $BUILD_DIR/.tools/multistrap.conf <<EOF
+[General]
+arch=
+directory=
+cleanup=true
+unpack=true
+noauth=true
+aptsources=Ubuntu
+bootstrap=Ubuntu
+allowrecommends=false
+addimportant=false
+omitrequired=true
+
+[Ubuntu]
+packages=libc6 libselinux1 libacl1 man-db libstdc++6 libfreetype6 libx11-6 libfontconfig1
+source=http://archive.ubuntu.com/ubuntu
+suite=trusty
+omitdebsrc=true
+EOF
 mkdir -p $BUILD_DIR/.root
-fakechroot -l $LFAKEPATH fakeroot-ng debootstrap --no-check-gpg --verbose --variant=fakechroot trusty $BUILD_DIR/.root || cat $BUILD_DIR/.root/debootstrap/debootstrap.log
+fakechroot -l $LFAKEPATH fakeroot-ng ./polystrap.sh $BUILD_DIR/.tools
 fakechroot -l $LFAKEPATH fakeroot-ng chroot $BUILD_DIR/.root apt install -y --force-yes gpgv
 echo "/app/.root bootstrapped" | indent
 
@@ -74,7 +89,7 @@ echo "export PATH=/sbin:/usr/sbin:\$PATH" >> $BUILD_DIR/.root/root/.bashrc
 echo "cd $HOME" >> $BUILD_DIR/.root/root/.bashrc
 
 echo "-----> Updating packages"
-fakechroot -l $LFAKEFATH fakeroot-ng chroot $BUILD_DIR/.root bash -c "cat > /etc/apt/sources.list <<EOF
+fakechroot -l $LFAKEPATH fakeroot-ng chroot $BUILD_DIR/.root bash -c "cat > /etc/apt/sources.list <<EOF
 deb http://archive.ubuntu.com/ubuntu trusty main universe
 deb http://archive.ubuntu.com/ubuntu trusty-security main
 deb http://archive.ubuntu.com/ubuntu trusty-updates main
