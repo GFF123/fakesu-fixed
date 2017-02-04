@@ -80,7 +80,7 @@ suite=trusty
 omitdebsrc=true
 EOF
 mkdir -p $BUILD_DIR/.root
-fakechroot -l $LFAKEPATH fakeroot-ng ./polystrap.sh $BUILD_DIR/.tools
+fakechroot -l $LFAKEPATH fakeroot-ng $BUILD_DIR/polystrap/polystrap.sh $BUILD_DIR/.tools
 fakechroot -l $LFAKEPATH fakeroot-ng chroot $BUILD_DIR/.root apt install -y --force-yes gpgv
 echo "/app/.root bootstrapped" | indent
 
