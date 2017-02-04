@@ -79,6 +79,7 @@ source=http://archive.ubuntu.com/ubuntu
 suite=stable
 omitdebsrc=true
 EOF
+mkdir default
 cat > default/config <<EOF
 ARCH=amd64
 ROOTDIR=$BUILD_DIR/.root
