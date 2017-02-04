@@ -76,10 +76,14 @@ omitrequired=true
 [Ubuntu]
 packages=libc6 libselinux1 libacl1 man-db libstdc++6 libfreetype6 libx11-6 libfontconfig1
 source=http://archive.ubuntu.com/ubuntu
-suite=trusty
+suite=stable
 omitdebsrc=true
 EOF
-mkdir -p $BUILD_DIR/.root
+cat > default/config <<EOF
+ARCH=amd64
+ROOTDIR=$BUILD_DIR/.root
+EOF
+#mkdir -p $BUILD_DIR/.root # causes an error
 fakechroot -l $LFAKEPATH fakeroot-ng $BUILD_DIR/polystrap/polystrap.sh $BUILD_DIR/.tools
 fakechroot -l $LFAKEPATH fakeroot-ng chroot $BUILD_DIR/.root apt install -y --force-yes gpgv
 echo "/app/.root bootstrapped" | indent
