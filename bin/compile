@@ -30,7 +30,7 @@ mkdir -p $CACHE_DIR/.tools/{wget,debootstrap}
 
 export PATH=/sbin:/usr/sbin:$PATH:$CACHE_DIR/.tools/wget/bin:$CACHE_DIR/.tools/debootstrap/usr/sbin:$BUILD_DIR/.tools/fakechroot/sbin:$BUILD_DIR/.tools/fakechroot/bin
 export DEBOOTSTRAP_DIR=$CACHE_DIR/.tools/debootstrap/usr/share/debootstrap
-export LD_LIBRARY_PATH=/lib/x86_64-linux-gnu
+export LD_LIBRARY_PATH=/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu
 export LFAKEPATH=$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/fakechroot/libfakechroot.so
 
 #echo "-----> Fetching and installing wget"
@@ -59,7 +59,6 @@ echo "polystrap downloaded" | indent
 #echo "fakechroot vendored" | indent
 
 cd $BUILDPACK_DIR
-ln -s $BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/libtalloc.so.2 libtalloc.so.2
 echo "-----> Bootstrapping a new base ubuntu trusty into /app/.root/"
 cat > $BUILD_DIR/.tools/multistrap.conf <<EOF
 [General]
